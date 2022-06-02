@@ -76,11 +76,8 @@ runs:
       shell: bash
       run: |
         cd dedicated-launch-test/server
-        CRASH_REPORT=`ls crash-reports/*.txt`
-        if [ -f "$CRASH_REPORT" ]; then
-          cat "$CRASH_REPORT"
-          exit 1
-        fi
+        cat crash-reports/* || true
+        grep 'For help, type "help"' logs/*
     - name: Cleanup
       shell: bash
       run: |
