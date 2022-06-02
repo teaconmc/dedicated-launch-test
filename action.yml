@@ -59,7 +59,7 @@ runs:
           java -jar arclight.jar nogui > /dev/null 2>&1
           echo -n "eula=true" > eula.txt
         fi
-        mkdir mods
+        mkdir mods || true
     - name: Copy mods
       shell: bash
       env:
