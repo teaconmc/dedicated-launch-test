@@ -77,6 +77,7 @@ runs:
           exit 1
         fi
     - name: Cleanup
+      shell: bash
       run: |
         cd dedicated-launch-test/server
         rm -vf mods/*
