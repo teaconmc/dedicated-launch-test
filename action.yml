@@ -1,0 +1,84 @@
+name: Dedicated Launch Test
+description: Test if specified mods can launch on dedicated server environment
+inputs:
+  extra:
+    description: Path to extra mods json
+    required: false
+    default: ""
+  mod:
+    description: Path to the mod file
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Setup
+      shell: bash
+      run: |
+        mkdir -p dedicated-launch-test/extra
+        mkdir -p dedicated-launch-test/server
+    - name: Apply extra mods cache
+      uses: actions/cache@v2
+      with:
+        path: dedicated-launch-test/extra
+        key: $${{ runner.os }}-extra-$${{ hashFiles('dedicated-launch-test/extra/**') }}
+        restore-keys: $${{ runner.os }}-extra-
+    - name: Apply server cache
+      uses: actions/cache@v2
+      with:
+        path: dedicated-launch-test/server
+        key: $${{ runner.os }}-extra-$${{ hashFiles('dedicated-launch-test/server/libraries/**') }}
+        restore-keys: $${{ runner.os }}-extra-
+    - name: Download extra mods
+      shell: bash
+      env:
+        EXTRA_MODS: $${{ runner.inputs.extra }}
+      run: |
+        cd dedicated-launch-test/extra
+        if [ -d "$EXTRA_MODS" ]; then
+          for e in `jq -r '.[]' $EXTRA_MODS`; do
+            echo $e > json
+            name=`jq -r '.name' json`
+            url=`jq -r '.file' json`
+            if [ ! -f "$name" ]; then
+              wget -q -O "$name" "$url"
+            fi
+          done
+        fi
+    - name: Setup Server
+      shell: bash
+      run: |
+        cd dedicated-launch-test/server
+        if [ ! -f arclight.jar ]; then
+          wget -q -O arclight.jar https://github.com/IzzelAliz/Arclight/releases/download/1.18%2F1.0.4/arclight-forge-1.18.2-1.0.4.jar
+          java -jar archlight.jar nogui
+          echo -n "eula=true" > eula.txt
+        fi
+        mkdir mods
+    - name: Copy mods
+      shell: bash
+      env:
+        MOD: $${{ runner.inputs.mod }}
+      run: |
+        cd dedicated-launch-test
+        cp -v extra/mods/* server/mods/
+        cp -v $MOD server/mods/
+    - name: Launch
+      shell: bash
+      run: |
+        cd dedicated-launch-test/server
+        java -jar arclight.jar nogui <<< "stop"
+    - name: Check
+      shell: bash
+      run: |
+        cd dedicated-launch-test/server
+        CRASH_REPORT=`ls crash-reports/*.txt`
+        if [ -f "$CRASH_REPORT" ]; then
+          cat "$CRASH_REPORT"
+          exit 1
+        fi
+    - name: Cleanup
+      run: |
+        cd dedicated-launch-test/server
+        rm -vf mods/*
+        rm -rf crash-reports
+        rm -rf logs
