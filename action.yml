@@ -37,7 +37,7 @@ runs:
         EXTRA_MODS="../../$EXTRA_MODS"
         if [ -f "$EXTRA_MODS" ]; then
           for e in `jq -r '.[]' $EXTRA_MODS`; do
-            echo $e > json
+            echo $e | tee json
             name=`jq -r '.name' json`
             url=`jq -r '.file' json`
             if [ ! -f "$name" ]; then
