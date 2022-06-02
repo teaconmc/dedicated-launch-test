@@ -46,6 +46,7 @@ runs:
             else
               echo "Skipping $name, already downloaded"
             fi
+            rm tmp.json
           done
         fi
     - name: Setup Server
@@ -55,7 +56,7 @@ runs:
         if [ ! -f arclight.jar ]; then
           echo "Installing Arclight"
           wget -q -O arclight.jar https://github.com/IzzelAliz/Arclight/releases/download/1.18%2F1.0.4/arclight-forge-1.18.2-1.0.4.jar
-          java -jar arclight.jar nogui > /dev/null 2>&1
+          java -jar arclight.jar nogui
           echo -n "eula=true" > eula.txt
         fi
         mkdir mods
