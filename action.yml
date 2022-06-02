@@ -64,9 +64,8 @@ runs:
       env:
         MOD: $${{ runner.inputs.mod }}
       run: |
-        cd dedicated-launch-test
-        cp -v extra/* server/mods/ || true
-        cp -v ../../$MOD server/mods/
+        cp -v dedicated-launch-test/extra/* dedicated-launch-test/server/mods/ || true
+        cp -v $MOD dedicated-launch-test/server/mods/
     - name: Launch
       shell: bash
       run: |
