@@ -37,9 +37,9 @@ runs:
         EXTRA_MODS="../../$EXTRA_MODS"
         if [ -f "$EXTRA_MODS" ]; then
           for e in `jq -r '.[]' $EXTRA_MODS`; do
-            echo $e | tee json
-            name=`jq -r '.name' json`
-            url=`jq -r '.file' json`
+            echo "$e" | tee tmp.json
+            name=`jq -r '.name' tmp.json`
+            url=`jq -r '.file' tmp.json`
             if [ ! -f "$name" ]; then
               echo "Downloading $name from $url"
               wget -q -O "$name" "$url"
