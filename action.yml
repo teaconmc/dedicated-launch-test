@@ -85,3 +85,4 @@ runs:
         rm -vf mods/*
         rm -rf crash-reports
         rm -rf logs
+        rm -rf world
