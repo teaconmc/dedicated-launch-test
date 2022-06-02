@@ -31,7 +31,7 @@ runs:
     - name: Download extra mods
       shell: bash
       env:
-        EXTRA_MODS: ${{ runner.inputs.extra }}
+        EXTRA_MODS: ${{ inputs.extra }}
       run: |
         cd dedicated-launch-test/extra
         EXTRA_MODS="../../$EXTRA_MODS"
@@ -62,7 +62,7 @@ runs:
     - name: Copy mods
       shell: bash
       env:
-        MOD: ${{ runner.inputs.mod }}
+        MOD: ${{ inputs.mod }}
       run: |
         cp -v dedicated-launch-test/extra/* dedicated-launch-test/server/mods/ || true
         cp -v $MOD dedicated-launch-test/server/mods/
