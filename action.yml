@@ -60,7 +60,7 @@ runs:
         MOD: $${{ runner.inputs.mod }}
       run: |
         cd dedicated-launch-test
-        cp -v extra/mods/* server/mods/
+        cp -v extra/* server/mods/
         cp -v $MOD server/mods/
     - name: Launch
       shell: bash
