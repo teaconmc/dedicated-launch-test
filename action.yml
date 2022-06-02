@@ -34,7 +34,7 @@ runs:
         EXTRA_MODS: $${{ runner.inputs.extra }}
       run: |
         cd dedicated-launch-test/extra
-        if [ -d "$EXTRA_MODS" ]; then
+        if [ -f "$EXTRA_MODS" ]; then
           for e in `jq -r '.[]' $EXTRA_MODS`; do
             echo $e > json
             name=`jq -r '.name' json`
@@ -62,9 +62,8 @@ runs:
       env:
         MOD: $${{ runner.inputs.mod }}
       run: |
-        set +e
         cd dedicated-launch-test
-        cp -v extra/* server/mods/
+        cp -v extra/* server/mods/ || true
         cp -v $MOD server/mods/
     - name: Launch
       shell: bash
