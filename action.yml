@@ -20,14 +20,14 @@ runs:
       uses: actions/cache@v2
       with:
         path: dedicated-launch-test/extra
-        key: ${{ runner.os }}-extra-$${{ hashFiles('dedicated-launch-test/extra/**') }}
+        key: ${{ runner.os }}-extra-${{ hashFiles('dedicated-launch-test/extra/**') }}
         restore-keys: ${{ runner.os }}-extra-
     - name: Apply server cache
       uses: actions/cache@v2
       with:
         path: dedicated-launch-test/server
         key: ${{ runner.os }}-extra-${{ hashFiles('dedicated-launch-test/server/libraries/**') }}
-        restore-keys: $${{ runner.os }}-extra-
+        restore-keys: ${{ runner.os }}-extra-
     - name: Download extra mods
       shell: bash
       env:
