@@ -40,7 +40,10 @@ runs:
             name=`jq -r '.name' json`
             url=`jq -r '.file' json`
             if [ ! -f "$name" ]; then
+              echo "Downloading $name from $url"
               wget -q -O "$name" "$url"
+            else
+              echo "Skipping $name, already downloaded"
             fi
           done
         fi
@@ -50,7 +53,7 @@ runs:
         cd dedicated-launch-test/server
         if [ ! -f arclight.jar ]; then
           wget -q -O arclight.jar https://github.com/IzzelAliz/Arclight/releases/download/1.18%2F1.0.4/arclight-forge-1.18.2-1.0.4.jar
-          java -jar arclight.jar nogui
+          java -jar arclight.jar nogui > /dev/null 2>&1
           echo -n "eula=true" > eula.txt
         fi
         mkdir mods
@@ -59,6 +62,7 @@ runs:
       env:
         MOD: $${{ runner.inputs.mod }}
       run: |
+        set +e
         cd dedicated-launch-test
         cp -v extra/* server/mods/
         cp -v $MOD server/mods/
