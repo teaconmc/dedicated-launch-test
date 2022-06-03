@@ -71,7 +71,7 @@ runs:
       shell: bash
       run: |
         cd dedicated-launch-test/server
-        java -jar arclight.jar nogui <<< "stop"
+        java -jar -Djava.awt.headless=true arclight.jar nogui <<< "stop"
     - name: Check
       shell: bash
       run: |
