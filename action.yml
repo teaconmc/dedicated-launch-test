@@ -5,6 +5,10 @@ inputs:
     description: Path to extra mods json
     required: false
     default: ""
+  extra1:
+    description: Another path to extra mods json, in case you need a new one
+    required: false
+    default: ""
   mod:
     description: Path to the mod file
     required: true
@@ -15,6 +19,7 @@ runs:
       shell: bash
       run: |
         mkdir -p dedicated-launch-test/extra
+        mkdir -p dedicated-launch-test/extra1
         mkdir -p dedicated-launch-test/server
     - name: Apply extra mods cache
       uses: actions/cache@v2
@@ -22,6 +27,11 @@ runs:
         path: dedicated-launch-test/extra
         key: ${{ runner.os }}-extra-${{ hashFiles(inputs.extra) }}
         #restore-keys: ${{ runner.os }}-extra-
+    - name: Apply extra-1 mods cache
+      uses: actions/cache@v2
+      with:
+        path: dedicated-launch-test/extra1
+        key: ${{ runner.os }}-extra1-${{ hashFiles(inputs.extra1) }}
     - name: Apply server cache
       uses: actions/cache@v2
       with:
@@ -32,11 +42,28 @@ runs:
       shell: bash
       env:
         EXTRA_MODS: ${{ inputs.extra }}
+        EXTRA1_MODS: ${{ inputs.extra1 }}
       run: |
         cd dedicated-launch-test/extra
         EXTRA_MODS="../../$EXTRA_MODS"
         if [ -f "$EXTRA_MODS" ]; then
           for e in `jq -c '.[]' $EXTRA_MODS`; do
+            echo "$e" > tmp.json
+            name=`jq -r '.name' tmp.json`
+            url=`jq -r '.file' tmp.json`
+            if [ ! -f "$name" ]; then
+              echo "Downloading $name from $url"
+              wget -q -O "$name" "$url"
+            else
+              echo "Skipping $name, already downloaded"
+            fi
+            rm tmp.json
+          done
+        fi
+        cd dedicated-launch-test/extra1
+        EXTRA1_MODS="../../$EXTRA1_MODS"
+        if [ -f "$EXTRA1_MODS" ]; then
+          for e in `jq -c '.[]' $EXTRA1_MODS`; do
             echo "$e" > tmp.json
             name=`jq -r '.name' tmp.json`
             url=`jq -r '.file' tmp.json`
@@ -66,6 +93,7 @@ runs:
         MOD: ${{ inputs.mod }}
       run: |
         cp -v dedicated-launch-test/extra/* dedicated-launch-test/server/mods/ || true
+        cp -v dedicated-launch-test/extra1/* dedicated-launch-test/server/mods/ || true
         cp -v $MOD dedicated-launch-test/server/mods/
     - name: Launch
       shell: bash
