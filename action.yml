@@ -37,7 +37,7 @@ runs:
       with:
         path: dedicated-launch-test/server
         key: ${{ runner.os }}-server-${{ hashFiles('dedicated-launch-test/server/libraries/**') }}
-        restore-keys: ${{ runner.os }}-server-
+        #restore-keys: ${{ runner.os }}-server-
     - name: Download extra mods
       shell: bash
       env:
