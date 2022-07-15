@@ -87,7 +87,7 @@ runs:
         cd dedicated-launch-test/server
         if [ ! -f arclight.jar ]; then
           echo "Installing Arclight"
-          wget -q -O arclight.jar https://ci.appveyor.com/api/buildjobs/0401r78yn9c9pp73/artifacts/build%2Flibs%2Farclight-forge-1.18.2-1.0.5-SNAPSHOT.jar
+          wget -q -O arclight.jar https://ci.appveyor.com/api/buildjobs/4u105hxnig986tg0/artifacts/build%2Flibs%2Farclight-forge-1.18.2-1.0.6-SNAPSHOT.jar
           java -jar arclight.jar nogui > /dev/null 2>&1
           echo -n "eula=true" > eula.txt
         fi
