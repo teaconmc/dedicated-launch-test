@@ -88,11 +88,10 @@ runs:
       shell: bash
       run: |
         cd dedicated-launch-test/server
-        if [ ! -f arclight.jar ]; then
+        if [ ! -f arclight-forge-1.19.4-1.0.4-SNAPSHOT.jar ]; then
           echo "Installing Arclight"
           curl -sLH 'Authorization: Bearer ${{ inputs.github_token }}' -o Arclight.zip https://api.github.com/repos/IzzelAliz/Arclight/actions/artifacts/661021621/zip
           unzip Arclight.zip
-          java -jar arclight-forge-1.19.4-1.0.4-SNAPSHOT.jar nogui > /dev/null 2>&1
           echo -n "eula=true" > eula.txt
         fi
         mkdir mods || true
