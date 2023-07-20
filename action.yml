@@ -26,18 +26,18 @@ runs:
         mkdir -p dedicated-launch-test/extra1
         mkdir -p dedicated-launch-test/server
     - name: Apply extra mods cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: dedicated-launch-test/extra
         key: ${{ runner.os }}-extra-${{ hashFiles(inputs.extra) }}
         #restore-keys: ${{ runner.os }}-extra-
     - name: Apply extra-1 mods cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: dedicated-launch-test/extra1
         key: ${{ runner.os }}-extra1-${{ hashFiles(inputs.extra1) }}
     - name: Apply server cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: dedicated-launch-test/server
         key: ${{ runner.os }}-server1-${{ hashFiles('dedicated-launch-test/server/libraries/**') }}
