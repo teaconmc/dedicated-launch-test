@@ -120,6 +120,7 @@ runs:
       shell: bash
       run: |
         cd dedicated-launch-test/server
+        echo ' -Dlog4j2.configurationFile=log4j-debug.xml ' >> user_jvm_args.txt
         ./run.sh nogui <<< "stop" &
         for i in $(seq 60); do
           sleep 5
@@ -137,6 +138,7 @@ runs:
           jps | grep BootstrapLauncher | sed -e 's/ BootstrapLauncher//g' > dslt.pid
           jstack $(cat dslt.pid)
           jmap -dump:live,format=b,file=heap.bin $(cat dslt.pid)
+          echo 'Server is hanging for more than 300 seconds, killing'
           kill -9 $(cat dslt.pid)
           exit -1
         fi
