@@ -121,7 +121,7 @@ runs:
     # redirecting STDIN.
     - name: Setup RCON
       shell: bash
-      run:
+      run: |
         cd dedicated-launch-test/server
         sha256sum -c rcon-check.txt || curl -L -O 'https://github.com/Tiiffi/mcrcon/releases/download/v0.7.2/mcrcon-0.7.2-linux-x86-64-static.zip'
         unzip -f -o mcrcon-0.7.2-linux-x86-64-static.zip
