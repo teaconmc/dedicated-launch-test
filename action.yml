@@ -116,13 +116,23 @@ runs:
         cp -v dedicated-launch-test/extra/* dedicated-launch-test/server/mods/ || true
         cp -v dedicated-launch-test/extra1/* dedicated-launch-test/server/mods/ || true
         cp -v $MOD dedicated-launch-test/server/mods/
+    # Based on my research, RCON thread only starts after MinecraftServer#loadLevel() is called.
+    # Thus, we can send /stop command via RCON without triggering NPE, like we got if we do it by 
+    # redirecting STDIN.
+    - name: Setup RCON
+      shell: bash
+      run:
+        cd dedicated-launch-test/server
+        sha256sum -c rcon-check.txt || curl -L -O https://github.com/Tiiffi/mcrcon/releases/download/v0.7.2/mcrcon-0.7.2-linux-x86-64-static.zip
+        unzip -f -o mcrcon-0.7.2-linux-x86-64-static.zip
     - name: Launch
       shell: bash
       run: |
         cd dedicated-launch-test/server
         echo ' -Dlog4j2.configurationFile=log4j-debug.xml ' > user_jvm_args.txt
-        ./run.sh nogui <<< "stop" &
+        ./run.sh nogui &
         for i in $(seq 60); do
+          ./mcrcon-0.7.2-linux-x86-64-static/mcrcon -H localhost -p 'dslt-neoforge-26.1' stop || echo 'Server is still starting/stopping...'
           sleep 5
           jobs > running.txt
           if [ ! -s running.txt ]; then
