@@ -123,7 +123,7 @@ runs:
       shell: bash
       run:
         cd dedicated-launch-test/server
-        sha256sum -c rcon-check.txt || curl -L -O https://github.com/Tiiffi/mcrcon/releases/download/v0.7.2/mcrcon-0.7.2-linux-x86-64-static.zip
+        sha256sum -c rcon-check.txt || curl -L -O 'https://github.com/Tiiffi/mcrcon/releases/download/v0.7.2/mcrcon-0.7.2-linux-x86-64-static.zip'
         unzip -f -o mcrcon-0.7.2-linux-x86-64-static.zip
     - name: Launch
       shell: bash
