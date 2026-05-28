@@ -50,7 +50,6 @@ runs:
         cd dedicated-launch-test/extra
         EXTRA_MODS="../../$EXTRA_MODS"
         if [ -f "$EXTRA_MODS" ]; then
-          cat $EXTRA_MODS
           for e in `jq -c '.[]' $EXTRA_MODS`; do
             echo "$e" > tmp.json
             name=`jq -r '.name' tmp.json`
