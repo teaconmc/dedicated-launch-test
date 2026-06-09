@@ -93,7 +93,7 @@ runs:
         echo 'disableConfigWatcher = true' > config/fml.toml
         echo "Getting latest NeoForge version..."
         #NF_VER=$(curl -s https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml | yq -p xml '.metadata.versioning.latest')
-        NF_VER=26.1.2.68-beta
+        NF_VER=26.1.2.75
         echo "Checking if NeoForge $NF_VER is installed..."
         if ! ls libraries/net/neoforged/neoforge/$NF_VER; then
           echo "Cannot find NeoForge $NF_VER, installing..."
